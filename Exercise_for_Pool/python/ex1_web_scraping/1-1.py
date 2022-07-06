@@ -1,6 +1,7 @@
 from time import sleep
 import re
 from tokenize import group
+import shutil
 
 import requests
 from bs4 import BeautifulSoup
@@ -60,8 +61,6 @@ for i in range(10):
             address = page_soup.select('span.region')
             if address:
                 address = address[0].text
-                print(address)
-                print(type(address))
                 devided_address =  devide_address(address)
                 prefecture = devided_address()[0]
                 print(prefecture)
@@ -79,10 +78,11 @@ for i in range(10):
                 building = building[0].text
             else:
                 building = None
-            
+            #a[class = "url go-off"]
             web_site = page_soup.select('a:-soup-contains("お店のホームページ")')
+            print(web_site)
             if web_site:
-                web_site = web_site[0].get('href') 
+                web_site = web_site[0].get('href')
                 if 'https' in web_site:
                     ssl = True
                 else:
@@ -110,3 +110,7 @@ for i in range(10):
 
 df = pd.DataFrame(d_list)
 df.to_csv('1-1.csv',index=None,encoding='utf-8-sig')
+
+source = r"C:\Users\taiha\Desktop\Final-Answer\1-1.csv"
+destination = r"C:\Users\taiha\Desktop\Final-Answer\Exercise_for_Pool\python\ex1_web_scraping\1-1.csv"
+shutil.move(source,destination)

@@ -2,13 +2,13 @@ from time import sleep
 import time
 import re 
 import random
+import shutil
 
 import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pandas as pd
 
-t1 = time.time()
 def devide_address(address):
     #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)',address)
     matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+)',address)
@@ -109,10 +109,10 @@ while True:
                 'SSL証明書':ssl
             })
             print(len(d_list))
-            if len(d_list) == 30:
+            if len(d_list) == 10:
                 break
             driver.back()
-    if len(d_list) == 30:
+    if len(d_list) == 10:
         break
     driver.find_element(By.CSS_SELECTOR,'ul.style_pages__Y9bbR > li:nth-of-type(10) > a').click()
     sleep(5)
@@ -120,6 +120,8 @@ while True:
 df = pd.DataFrame(d_list)
 df.to_csv('1-2.csv',index=None,encoding='utf-8-sig')
 
-t2 = time.time()
-print(t2-t1)
+source = r"C:\Users\taiha\Desktop\Final-Answer\1-2.csv"
+destination = r"C:\Users\taiha\Desktop\Final-Answer\Exercise_for_Pool\python\ex1_web_scraping\1-2.csv"
+shutil.move(source,destination)
+
 driver.quit()
