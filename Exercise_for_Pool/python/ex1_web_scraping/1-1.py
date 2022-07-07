@@ -10,13 +10,9 @@ import pandas as pd
 
 def devide_address(address):
     #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)',address)
-    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+)',address)
-    print(matches.groups)
+    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+|[0‐9]+)',address)
     return matches.groups
 
-
-  
-  
 
 base_url = 'https://r.gnavi.co.jp/area/tokyo/japanese/rs/?p={}'
 
@@ -55,19 +51,18 @@ for i in range(10):
 
             mail = page_soup.select('a:-soup-contains("お店に直接メールする")')
             if mail:
-                mail = mail[0].get('href') 
+                mail = mail[0].get('href')
+                print(mail)
             else:
                 mail = None
+                print(None)
             address = page_soup.select('span.region')
             if address:
                 address = address[0].text
                 devided_address =  devide_address(address)
                 prefecture = devided_address()[0]
-                print(prefecture)
                 district = devided_address()[1]
-                print(district)
                 number = devided_address()[2]
-                print(number)
             else:
                 prefecture = None
                 district = None
@@ -80,9 +75,9 @@ for i in range(10):
                 building = None
             #a[class = "url go-off"]
             web_site = page_soup.select('a:-soup-contains("お店のホームページ")')
-            print(web_site)
             if web_site:
                 web_site = web_site[0].get('href')
+                print(web_site)
                 if 'https' in web_site:
                     ssl = True
                 else:
@@ -103,9 +98,9 @@ for i in range(10):
                 'URL':web_site,
                 'SSL証明書':ssl
             })
-            if len(d_list) == 10:
+            if len(d_list) == 50:
                 break
-    if len(d_list) == 10:
+    if len(d_list) == 50:
         break
 
 df = pd.DataFrame(d_list)
