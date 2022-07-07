@@ -8,11 +8,10 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pandas as pd
-
+l
 def devide_address(address):
     #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)',address)
-    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+)',address)
-    print(matches.groups)
+    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+|[0‐9]+)',address)
     return matches.groups
 
 user_agent = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
@@ -43,10 +42,10 @@ while True:
         else:
             driver.find_element(By.CSS_SELECTOR,'a.style_titleLink__oiHVJ').click()
             sleep(5)
-            print(driver.current_url)
             shop_name = driver.find_elements(By.CSS_SELECTOR,'p#info-name')
             if shop_name:
-                shop_name = shop_name[0].text    
+                shop_name = shop_name[0].text
+                print(shop_name)
         
             tel = driver.find_elements(By.CSS_SELECTOR,'span.number')
             if tel:
@@ -54,26 +53,22 @@ while True:
             else:
                 tel = None
             #tel = re.sub('\n\t*',' ',tel)
-            '''
-            mail = driver.find_elements(By.CSS_SELECTOR,'a:-soup-contains("お店に直接メールする")')
+            
+            mail = driver.find_elements(By.CSS_SELECTOR,'table.basic-table > tbody > tr:nth-of-type(12) > td > ul > li:nth-of-type(2) > a')
             if mail:
                 mail = mail[0].get_attribute('href')
+                print(mail)
             else:
                 mail = None
-            '''
-            mail = None
+                print(None)
+        
             address = driver.find_elements(By.CSS_SELECTOR,'span.region')
             if address:
                 address = address[0].text
-                print(address)
-                print(type(address))
                 devided_address =  devide_address(address)
                 prefecture = devided_address()[0]
-                print(prefecture)
                 district = devided_address()[1]
-                print(district)
                 number = devided_address()[2]
-                print(number)
             else:
                 prefecture = None
                 district = None
@@ -109,10 +104,10 @@ while True:
                 'SSL証明書':ssl
             })
             print(len(d_list))
-            if len(d_list) == 10:
+            if len(d_list) == 20:
                 break
             driver.back()
-    if len(d_list) == 10:
+    if len(d_list) == 20:
         break
     driver.find_element(By.CSS_SELECTOR,'ul.style_pages__Y9bbR > li:nth-of-type(10) > a').click()
     sleep(5)
