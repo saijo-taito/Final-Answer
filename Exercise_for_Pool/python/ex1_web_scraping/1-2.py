@@ -8,7 +8,7 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pandas as pd
-l
+
 def devide_address(address):
     #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)',address)
     matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+|[0‐9]+)',address)
