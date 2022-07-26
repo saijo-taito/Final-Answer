@@ -9,9 +9,13 @@ import pandas as pd
 
 
 def devide_address(address):
-    #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)',address)
-    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+|[0‐9]+)',address)
+    #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+)',address)
+    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9|-|‐]+)',address)
     return matches.groups
+
+def correct_mail(mail):
+    matche_mail = mail.replace('mailto:','')
+    return matche_mail
 
 
 base_url = 'https://r.gnavi.co.jp/area/tokyo/japanese/rs/?p={}'
@@ -52,7 +56,7 @@ for i in range(10):
             mail = page_soup.select('a:-soup-contains("お店に直接メールする")')
             if mail:
                 mail = mail[0].get('href')
-                print(mail)
+                mail = correct_mail(mail)
             else:
                 mail = None
                 print(None)
