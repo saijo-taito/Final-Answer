@@ -59,7 +59,6 @@ for i in range(10):
                 mail = correct_mail(mail)
             else:
                 mail = None
-                print(None)
             address = page_soup.select('span.region')
             if address:
                 address = address[0].text

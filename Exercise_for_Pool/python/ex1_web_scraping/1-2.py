@@ -10,9 +10,13 @@ from selenium.webdriver.common.by import By
 import pandas as pd
 
 def devide_address(address):
-    #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]|.+?市.+?区|.+?[市区町村])(.+)',address)
-    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+|[0‐9]+)',address)
+    #matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9]+-[0-9]+-[0-9]+|[0-9]+-[0-9]+|[0-9]+|[0‐9]+-[0‐9]+‐[0-9]+|[0-9]+‐[0-9]+|[0‐9]+)',address)
+    matches = re.match('(.{2,3}?[都道府県])(.+?郡.+?[町村]\D+|.+?市.+?区\D+|.+?[市区町村]\D+)([0-9|-|‐]+)',address)
     return matches.groups
+
+def correct_mail(mail):
+    matche_mail = mail.replace('mailto:','')
+    return matche_mail
 
 user_agent = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
                   'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
@@ -57,10 +61,9 @@ while True:
             mail = driver.find_elements(By.CSS_SELECTOR,'table.basic-table > tbody > tr:nth-of-type(12) > td > ul > li:nth-of-type(2) > a')
             if mail:
                 mail = mail[0].get_attribute('href')
-                print(mail)
+                mail = correct_mail(mail)
             else:
                 mail = None
-                print(None)
         
             address = driver.find_elements(By.CSS_SELECTOR,'span.region')
             if address:
